@@ -26,7 +26,7 @@ public class TempHumidRTPByDate extends TempHumidRTP {
                 isTargetDate = true;
             }
             
-            if (isTargetDate) {
+            if (isTargetDate && value != -999.0) {
                 cleanedData.add(value);
             }
 
