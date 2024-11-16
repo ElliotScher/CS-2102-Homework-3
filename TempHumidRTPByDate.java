@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.List;
 
 public class TempHumidRTPByDate extends TempHumidRTP {
     public double date;
@@ -8,24 +9,38 @@ public class TempHumidRTPByDate extends TempHumidRTP {
     }
 
     @Override
+    public void intakeData(List<Double> data) {
+        this.data = new LinkedList<>(data);
+        clean();
+        super.parse();
+        super.sort();
+    }
+
+    @Override
     public void clean() {
-        boolean isTargetDate = false;
-        LinkedList<Double> cleanedData = new LinkedList<>();
+        LinkedList<Double> filteredData = new LinkedList<>();
+        boolean foundTargetDate = false;
 
-        for (Double value : data) {
-            if (value == date) {
-                isTargetDate = true;
+        for (int i = 0; i < data.size(); i++) {
+            Double currentValue = data.get(i);
+
+            if (foundTargetDate && isDate(currentValue)) {
+                foundTargetDate = false;
             }
+
+            // If the current value is a date and matches the target date, start adding data
+            if (currentValue == date) {
+                foundTargetDate = true;
+            }
+
+            // If the target date is found, add all subsequent data points
+            else if (foundTargetDate) {
+                filteredData.add(currentValue);
+            }
+
             
-            if (isTargetDate && value != -999.0) {
-                cleanedData.add(value);
-            }
-
-            if (isDate(value) && isTargetDate) {
-                isTargetDate = false;
-            }
         }
-        data = cleanedData;
+        data = filteredData;
         super.clean();
     }
 }
