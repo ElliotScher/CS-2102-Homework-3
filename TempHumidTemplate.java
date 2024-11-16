@@ -27,7 +27,7 @@ public abstract class TempHumidTemplate implements TempHumid {
             temperatures.add(data.get(i));
             humidities.add(data.get(i + 1));
         }
-        // data.clear();
+        data.clear();
     }
 
     @Override
