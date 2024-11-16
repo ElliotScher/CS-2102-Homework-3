@@ -14,16 +14,15 @@ public class TempHumidRTPByDate extends TempHumidRTP {
 
         for (Double value : data) {
             if (isTargetDate) {
-                if (value != -999.0) {
-                    cleanedData.add(value);
-                }
-            } else {
-                if (value == date) {
-                    isTargetDate = true;
-                }
+                cleanedData.add(value);
+            } else if (isTargetDate && isDate(value)) {
+                break;
+            } else if (value == date) {
+                isTargetDate = true;
             }
         }
         data = cleanedData;
+        // super.clean();
     }
 
     public LinkedList<Double> getData() {
